@@ -28,7 +28,15 @@ async function createUser({ username, password }) {
   }
 }
 
-async function getUser({ username, password }) {}
+async function getUser({ username, password }) {
+  try {
+    const user = await getUserByUsername(username);
+    const hashedPassword = user.password;
+    console.log("hashedPassword in getUser: ", hashedPassword)
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function getUserById(userId) {}
 
