@@ -1,11 +1,16 @@
 /* eslint-disable */
 const client = require("./client");
+const bcrypt = require("bcrypt");
 
 // database functions
 
 // user functions
 async function createUser({ username, password }) {
   try {
+    const SALT_COUNT = 10;
+
+    const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
+
     const {
       rows: [user],
     } = await client.query(
@@ -15,7 +20,7 @@ async function createUser({ username, password }) {
       ON CONFLICT (username) DO NOTHING
       RETURNING *;
     `,
-      [username, password]
+      [username, hashedPassword]
     );
     return user;
   } catch (error) {
