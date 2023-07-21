@@ -1,5 +1,6 @@
 /* eslint-disable */
 const client = require("./client");
+const { attachActivitiesToRoutines } = require("./activities")
 
 async function createRoutine({ creatorId, isPublic, name, goal }) {
   try {
