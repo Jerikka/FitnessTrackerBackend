@@ -39,9 +39,38 @@ async function getRoutinesWithoutActivities() {
   }
 }
 
-async function getAllRoutines() {}
+async function getAllRoutines() {
+  try {
+    const {
+      rows: routines,
+    } = await client.query(
+      `
+      SELECT *
+      FROM routines;
+      `
+    )
+    return routines;
+  } catch (error) {
+    throw error;
+  }
+}
 
-async function getAllPublicRoutines() {}
+async function getAllPublicRoutines() {
+  try {
+    const {
+      rows: publicRoutines,
+    } = await client.query(
+      `
+      SELECT *
+      FROM routines
+      WHERE "isPublic"=true;
+      `
+    )
+    return publicRoutines;
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function getAllRoutinesByUser({ username }) {}
 
