@@ -3,7 +3,7 @@ const client = require("./client");
 
 async function createRoutine({ creatorId, isPublic, name, goal }) {
   try {
-    console.log("you have reached createRoutine");
+    
     const {
       rows: [routine],
     } = await client.query(
