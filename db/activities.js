@@ -77,7 +77,32 @@ async function getActivityByName(name) {
 }
 
 // used as a helper inside db/routines.js
-async function attachActivitiesToRoutines(routines) {}
+async function attachActivitiesToRoutines(routines) {
+  try {
+    const {
+      rows: routineActivities,
+    } = await client.query(`
+    SELECT activities.*, routineactivities.*
+    FROM activities
+    JOIN routineactivities ON activities.id = routineactivities."activityId";
+    
+    `)
+
+    routines.forEach(routine => {
+      routine.activity = routineActivities
+      console.log("routine.activity: ", routine.activity)
+    });
+
+    
+    
+    return routines;
+
+
+  } catch (error) {
+    throw error;
+  }
+ 
+}
 
 async function updateActivity({ id, ...fields }) {
   // don't try to update the id

@@ -49,7 +49,7 @@ async function getRoutinesWithoutActivities() {
       
       `
     );
-
+    
     return rows;
   } catch (error) {
     throw error;
@@ -67,9 +67,15 @@ async function getAllRoutines() {
       JOIN users ON routines."creatorId" = users.id;
       `
     );
-    console.log("routines from getAllRoutines: ", routines)
+    
+    const routinesWithActivities = await attachActivitiesToRoutines(routines);
 
-    return routines
+    console.log("routinesWithActivities from getAllRoutines: ", routinesWithActivities)
+
+    return routinesWithActivities
+
+    
+    
     
   } catch (error) {
     throw error;
