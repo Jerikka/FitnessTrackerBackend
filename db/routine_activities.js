@@ -117,7 +117,7 @@ async function canEditRoutineActivity(routineActivityId, userId) {
       rows: [routineActivity],
     } = await client.query(
       `
-      SELECT routines."creatorId" AS "creatorId"
+      SELECT *
       FROM routines
       JOIN routine_activities ON routines.id = routine_activities."routineId"
       WHERE routine_activities.id=$1;
