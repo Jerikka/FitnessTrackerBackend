@@ -146,8 +146,10 @@ async function getPublicRoutinesByActivity({ id }) {
       SELECT routines.*, users.username AS "creatorName"
       FROM routines
       JOIN users ON routines."creatorId" = users.id
-      WHERE "isPublic"=true;
-      `
+      JOIN routine_activities ON routines.id = routine_activities."routineId"
+      WHERE "isPublic"=true AND routine_activities."activityId"=$1;
+      `,
+      [id]
     );
 
     // console.log("publicRoutines: ", routines);
