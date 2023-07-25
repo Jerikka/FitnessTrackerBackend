@@ -80,9 +80,9 @@ async function getActivityByName(name) {
 async function attachActivitiesToRoutines(routines) {
   try {
     const { rows: routineActivities } = await client.query(`
-    SELECT activities.*, routineactivities."routineId", routineactivities."activityId", routineactivities.duration, routineactivities.count
+    SELECT activities.*, routine_activities."routineId", routine_activities."activityId" AS "routineActivityId", routine_activities.duration, routine_activities.count
     FROM activities
-    JOIN routineactivities ON activities.id = routineactivities."activityId";
+    JOIN routine_activities ON activities.id = routine_activities."activityId";
     
     `);
 
@@ -91,7 +91,7 @@ async function attachActivitiesToRoutines(routines) {
         (routineActivities) => routineActivities.routineId === routine.id
       );
 
-      console.log("routine: ", routine);
+      // console.log("routine: ", routine);
     });
 
     // console.log("routineActivities: ", routineActivities)

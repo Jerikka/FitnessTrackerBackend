@@ -69,10 +69,10 @@ async function getAllRoutines() {
 
     const routinesWithActivities = await attachActivitiesToRoutines(routines);
 
-    console.log(
-      "routinesWithActivities from getAllRoutines: ",
-      routinesWithActivities[1].activities
-    );
+    // console.log(
+    //   "routinesWithActivities from getAllRoutines: ",
+    //   routinesWithActivities[1]
+    // );
 
     return routinesWithActivities;
   } catch (error) {
@@ -190,7 +190,7 @@ async function destroyRoutine(id) {
   try {
     await client.query(
       `
-      DELETE FROM routineactivities
+      DELETE FROM routine_activities
       WHERE "routineId"=$1;
       `,
       [id]

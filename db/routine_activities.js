@@ -12,7 +12,7 @@ async function addActivityToRoutine({
       rows: [routine_activity],
     } = await client.query(
       `
-      INSERT INTO routineactivities("routineId", "activityId", count, duration)
+      INSERT INTO routine_activities("routineId", "activityId", count, duration)
       VALUES($1, $2, $3, $4)
       RETURNING *;
       `,
@@ -32,24 +32,80 @@ async function getRoutineActivityById(id) {
     } = await client.query(
       `
       SELECT *
-      FROM routineactivities
+      FROM routine_activities
       WHERE id=$1;
       `,
       [id]
-    )
-    
+    );
+
     return routineActivity;
   } catch (error) {
     throw error;
   }
 }
 
-async function getRoutineActivitiesByRoutine({ id }) {}
+async function getRoutineActivitiesByRoutine({ id }) {
+  try {
+    const { rows: routineActivity } = await client.query(
+      `
+      SELECT *
+      from routine_activities
+      WHERE "routineId" = $1
+      
+      `,
+      [id]
+    );
 
+    return routineActivity;
+  } catch (error) {
+    throw error;
+  }
+}
 
-async function updateRoutineActivity({ id, ...fields }) {}
+async function updateRoutineActivity({ id, ...fields }) {
+  const setString = Object.keys(fields)
+    .map((key, index) => `"${key}"=$${index + 1}`)
+    .join(",");
 
-async function destroyRoutineActivity(id) {}
+  if (setString.length === 0) {
+    return;
+  }
+
+  try {
+    const {
+      rows: [routineActivity],
+    } = await client.query(
+      `
+      UPDATE routine_activities
+      SET ${setString}
+      WHERE id=${id}
+      RETURNING *;
+      `,
+      Object.values(fields)
+    );
+    return routineActivity;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function destroyRoutineActivity(id) {
+  console.log("id from destroyRoutineActivity: ", id);
+
+  try {
+    await client.query(
+      `
+      DELETE FROM routine_activities
+      WHERE id=$1;
+      `,
+      [id]
+    );
+
+    // console.log("rows from destroyRoutineActivity: ", rows)
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function canEditRoutineActivity(routineActivityId, userId) {}
 
