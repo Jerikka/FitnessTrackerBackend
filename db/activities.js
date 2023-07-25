@@ -80,7 +80,7 @@ async function getActivityByName(name) {
 async function attachActivitiesToRoutines(routines) {
   try {
     const { rows: routineActivities } = await client.query(`
-    SELECT activities.*, routine_activities."routineId", routine_activities."activityId" AS "routineActivityId", routine_activities.duration, routine_activities.count
+    SELECT activities.*, routine_activities."routineId", routine_activities."activityId", routine_activities.id AS "routineActivityId", routine_activities.duration, routine_activities.count
     FROM activities
     JOIN routine_activities ON activities.id = routine_activities."activityId";
     

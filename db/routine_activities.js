@@ -90,18 +90,22 @@ async function updateRoutineActivity({ id, ...fields }) {
 }
 
 async function destroyRoutineActivity(id) {
-  console.log("id from destroyRoutineActivity: ", id);
+  // console.log("id from destroyRoutineActivity: ", id);
 
   try {
     await client.query(
+      
+
       `
       DELETE FROM routine_activities
-      WHERE id=$1;
+      WHERE id = $1
+      RETURNING *;
+      
       `,
       [id]
     );
 
-    // console.log("rows from destroyRoutineActivity: ", rows)
+    
   } catch (error) {
     throw error;
   }
