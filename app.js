@@ -26,19 +26,23 @@ app.use(express.json());
 const apiRouter = require("./api");
 app.use("/api", apiRouter);
 
-const { client } = require("./db/client");
+const { client } = require("./db");
 
-app.use((error, req, res, next) => {
-  res.status(500);
-  res.send({
-    name: error.name,
-    message: error.message,
-  });
-});
+// app.use((error, req, res, next) => {
+//   res.status(500);
+//   res.send({
+//     name: error.name,
+//     message: error.message,
+//   });
+// });
+
+
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
+  
   client.connect();
+  
 });
 
 module.exports = app;
