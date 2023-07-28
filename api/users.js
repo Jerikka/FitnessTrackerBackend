@@ -4,6 +4,7 @@ const usersRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
 const { getUser, getUserByUsername, createUser } = require("../db/users");
+const { getAllRoutinesByUser } = require("../db/routines")
 
 // usersRouter.use((req, res, next) => {
 //   console.log("A request is being made to /users");
@@ -88,6 +89,25 @@ usersRouter.post("/login", async (req, res, next) => {
 
 // GET /api/users/me
 
+
 // GET /api/users/:username/routines
+usersRouter.get("/:username/routines", async (req, res, next) => {
+  const { username } = req.body;
+  
+  try {
+    const routines = await getAllRoutinesByUser(username);
+
+    res.send({
+      message: "Here are the routines:",
+      
+      routines,
+    });
+
+  } catch (error) {
+    
+    next(error);
+  }
+
+})
 
 module.exports = usersRouter;
