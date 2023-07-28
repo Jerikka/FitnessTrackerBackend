@@ -14,17 +14,13 @@ const { getUser, getUserByUsername, createUser } = require("../db/users");
 // POST /api/users/register
 usersRouter.post("/register", async (req, res, next) => {
   const { username, password } = req.body;
-  // console.log("req.body from /register: ", req.body);
-  // console.log("username from /register: ", username);
-  // console.log("password from /register: ", password);
 
   try {
     if (password.length < 8) {
       next({
-        
         message: "Password Too Short!",
         name: "PasswordTooShortError",
-        error: "Password Too Short"
+        error: "Password Too Short",
       });
     }
 
@@ -48,8 +44,6 @@ usersRouter.post("/register", async (req, res, next) => {
       JWT_SECRET
     );
 
-    // console.log("user in /register: ", user);
-
     res.send({
       message: "Thank you for signing up",
       token,
@@ -61,6 +55,36 @@ usersRouter.post("/register", async (req, res, next) => {
 });
 
 // POST /api/users/login
+usersRouter.post("/login", async (req, res, next) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    next({
+      message: "Please supply both a username and password",
+      name: "MissingCredentialsError",
+      error: "Please supply both a username and password",
+    });
+  }
+
+  try {
+    const user = await getUser({ username, password });
+
+    if (user.username == username) {
+      const token = jwt.sign({ id: user.id, username }, JWT_SECRET);
+
+      res.send({ message: "you're logged in!", token, user });
+    } else {
+      next({
+        message: "Username or password is incorrect",
+        name: "IncorrectCredentialsError",
+        error: "Username or password is incorrect",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
 
 // GET /api/users/me
 

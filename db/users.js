@@ -37,6 +37,7 @@ async function getUser({ username, password }) {
 
     if (isValid) {
       delete user.password;
+      
       return user;
     }
   } catch (error) {
