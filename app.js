@@ -37,12 +37,17 @@ app.use("/api", apiRouter);
 
 
 app.use((error, req, res, next) => {
+  console.log("error from app.use: ", error)
   res.status(500);
   res.send({
+    // message: error.message,
     name: error.name,
     message: error.message,
+    error: error.error,
   });
 });
+
+
 
 
 
