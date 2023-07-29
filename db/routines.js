@@ -140,6 +140,7 @@ async function getPublicRoutinesByUser({ username }) {
 async function getPublicRoutinesByActivity({ id }) {
   // activityId = { id };
   // console.log("activityId: ", activityId)
+  // console.log("id from getPublicRoutinesByActivity function: ", id)
   try {
     const { rows: routines } = await client.query(
       `
