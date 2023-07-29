@@ -3,19 +3,24 @@ const express = require("express");
 const usersRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
-const { getUser, getUserByUsername, createUser } = require("../db/users");
+const {
+  getUser,
+  getUserByUsername,
+  createUser,
+  getUserById,
+} = require("../db/users");
 const { getPublicRoutinesByUser } = require("../db/routines");
+const { requireUser } = require("./utils");
 
-// usersRouter.use((req, res, next) => {
-//   console.log("A request is being made to /users");
+usersRouter.use((req, res, next) => {
+  console.log("A request is being made to /users");
 
-//   next();
-// });
+  next();
+});
 
 // POST /api/users/register
 usersRouter.post("/register", async (req, res, next) => {
   const { username, password } = req.body;
-  
 
   try {
     if (password.length < 8) {
@@ -89,14 +94,29 @@ usersRouter.post("/login", async (req, res, next) => {
 });
 
 // GET /api/users/me
+usersRouter.get("/me", requireUser, async (req, res, next) => {
+  // const id = req.user.id;
+  // const auth = req.header("Authorization");
+  const user = req.user;
+  console.log("user from /me: ", user);
+  // console.log("id: ", id)
+  // console.log("req.headers: ", req.headers)
+  // console.log("user from /me: ", user)
+  // console.log("auth: ", auth)
 
+  try {
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // GET /api/users/:username/routines
 usersRouter.get("/:username/routines", async (req, res, next) => {
   const { username } = req.params;
-  console.log("req.params from /:username/routines: ", req.params)
+  // console.log("req.params from /:username/routines: ", req.params)
 
-  console.log("username from /:username/routines: ", username)
+  // console.log("username from /:username/routines: ", username)
 
   try {
     const routines = await getPublicRoutinesByUser({ username });
