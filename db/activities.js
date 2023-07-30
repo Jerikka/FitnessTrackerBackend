@@ -5,6 +5,8 @@ const client = require("./client");
 async function createActivity({ name, description }) {
   // return the new activity
 
+  // console.log(`name: ${name}, description: ${description} from createActivity`)
+
   try {
     const {
       rows: [activity],
@@ -19,7 +21,7 @@ async function createActivity({ name, description }) {
 
     return activity;
   } catch (error) {
-    console.log("error from createActivity: ", error);
+    // console.log("error from createActivity: ", error);
     throw error;
   }
 }
@@ -59,6 +61,7 @@ async function getActivityById(id) {
 }
 
 async function getActivityByName(name) {
+  // console.log(`name from getActivityByName: ${name}`)
   try {
     const {
       rows: [activity],
@@ -108,6 +111,7 @@ async function updateActivity({ id, ...fields }) {
   // don't try to update the id
   // do update the name and description
   // return the updated activity
+  
   const setString = Object.keys(fields)
     .map((key, index) => `"${key}"=$${index + 1}`)
     .join(",");
@@ -117,6 +121,7 @@ async function updateActivity({ id, ...fields }) {
   }
 
   try {
+    
     const {
       rows: [activity],
     } = await client.query(
