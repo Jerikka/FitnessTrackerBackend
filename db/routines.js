@@ -119,6 +119,7 @@ async function getAllRoutinesByUser({ username }) {
 }
 
 async function getPublicRoutinesByUser({ username }) {
+  // console.log("username from getPublicRoutinesByUser: ", username)
   try {
     const { rows: routines } = await client.query(
       `

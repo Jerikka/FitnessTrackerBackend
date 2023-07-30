@@ -9,7 +9,10 @@ const {
   createUser,
   getUserById,
 } = require("../db/users");
-const { getPublicRoutinesByUser } = require("../db/routines");
+const {
+  getPublicRoutinesByUser,
+  getAllRoutinesByUser,
+} = require("../db/routines");
 const { requireUser } = require("./utils");
 
 usersRouter.use((req, res, next) => {
@@ -98,7 +101,7 @@ usersRouter.get("/me", requireUser, async (req, res, next) => {
   // const id = req.user.id;
   // const auth = req.header("Authorization");
   const user = req.user;
-  console.log("user from /me: ", user);
+  // console.log("user from /me: ", user);
   // console.log("id: ", id)
   // console.log("req.headers: ", req.headers)
   // console.log("user from /me: ", user)
@@ -114,16 +117,30 @@ usersRouter.get("/me", requireUser, async (req, res, next) => {
 // GET /api/users/:username/routines
 usersRouter.get("/:username/routines", async (req, res, next) => {
   const { username } = req.params;
-  // console.log("req.params from /:username/routines: ", req.params)
+  // console.log("req.params from /:username/routines: ", req.params);
+  // console.log("username from /:username/routines: ", username);
 
-  // console.log("username from /:username/routines: ", username)
+  const user = req.user.username;
+  // console.log("user from /:username/routines: ", user);
 
-  try {
-    const routines = await getPublicRoutinesByUser({ username });
+  if (username === user) {
+    // console.log(`username: ${username} and user: ${user} is truthy`);
+    try {
+      // console.log("req.params within try/catch block: ", req.params)
+      const routines = await getAllRoutinesByUser(req.params);
 
-    res.send(routines);
-  } catch (error) {
-    next(error);
+      res.send(routines);
+    } catch ({ name, message }) {
+      next({ name, message });
+    }
+  } else {
+    // console.log(`username: ${username} and user: ${user} is falsy`);
+    try {
+      const routines = await getPublicRoutinesByUser(req.params);
+      res.send(routines);
+    } catch ({ name, message }) {
+      next({ name, message });
+    }
   }
 });
 
