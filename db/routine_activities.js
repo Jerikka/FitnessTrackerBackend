@@ -21,6 +21,7 @@ async function addActivityToRoutine({
 
     return routine_activity;
   } catch (error) {
+    
     throw error;
   }
 }
@@ -90,7 +91,7 @@ async function updateRoutineActivity({ id, ...fields }) {
 }
 
 async function destroyRoutineActivity(id) {
-  // console.log("id from destroyRoutineActivity: ", id);
+  console.log("id from destroyRoutineActivity: ", id);
 
   try {
     const {

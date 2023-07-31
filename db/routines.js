@@ -101,6 +101,7 @@ async function getAllPublicRoutines() {
 }
 
 async function getAllRoutinesByUser({ username }) {
+  
   try {
     const { rows: routines } = await client.query(
       `
@@ -200,7 +201,9 @@ async function destroyRoutine(id) {
       [id]
     );
 
-    await client.query(
+    const {
+      rows: [routine],
+    } = await client.query(
       `
       DELETE FROM routines
       WHERE id=$1
@@ -208,6 +211,7 @@ async function destroyRoutine(id) {
       `,
       [id]
     );
+    return routine;
   } catch (error) {
     throw error;
   }
