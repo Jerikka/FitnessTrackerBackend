@@ -65,14 +65,11 @@ async function getAllRoutines() {
       `
     );
 
-    // console.log("routines from getAllRoutines: ", routines)
+   
 
     const routinesWithActivities = await attachActivitiesToRoutines(routines);
 
-    // console.log(
-    //   "routinesWithActivities from getAllRoutines: ",
-    //   routinesWithActivities[1]
-    // );
+   
 
     return routinesWithActivities;
   } catch (error) {
@@ -91,7 +88,7 @@ async function getAllPublicRoutines() {
       `
     );
 
-    // console.log("publicRoutines: ", publicRoutines)
+   
 
     const routinesWithActivities = await attachActivitiesToRoutines(routines);
     return routinesWithActivities;
@@ -120,7 +117,7 @@ async function getAllRoutinesByUser({ username }) {
 }
 
 async function getPublicRoutinesByUser({ username }) {
-  // console.log("username from getPublicRoutinesByUser: ", username)
+ 
   try {
     const { rows: routines } = await client.query(
       `
@@ -140,9 +137,7 @@ async function getPublicRoutinesByUser({ username }) {
 }
 
 async function getPublicRoutinesByActivity({ id }) {
-  // activityId = { id };
-  // console.log("activityId: ", activityId)
-  // console.log("id from getPublicRoutinesByActivity function: ", id)
+ 
   try {
     const { rows: routines } = await client.query(
       `
@@ -155,7 +150,7 @@ async function getPublicRoutinesByActivity({ id }) {
       [id]
     );
 
-    // console.log("publicRoutines: ", routines);
+   
 
     const routinesWithActivities = await attachActivitiesToRoutines(routines);
     return routinesWithActivities;

@@ -61,6 +61,10 @@ const routineActivitiesRouter = require("./routineActivities");
 // const { getUserById } = require('../db');
 router.use("/routine_activities", routineActivitiesRouter);
 
+router.use((req, res, next) => {
+  res.status(404).send({ message: "404 - Unable to retrieve the requested page" });
+});
+
 router.use((error, req, res, next) => {
   res.status(500);
   res.send({

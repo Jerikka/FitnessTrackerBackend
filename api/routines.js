@@ -7,8 +7,13 @@ const {
   destroyRoutine,
   updateRoutine,
 } = require("../db/routines");
-const { addActivityToRoutine } = require("../db/routine_activities");
+const {
+  addActivityToRoutine,
+  getRoutineActivitiesByRoutine,
+  checkRoutineActivityExists,
+} = require("../db/routine_activities");
 const { requireUser } = require("./utils");
+const { getActivityById } = require("../db/activities");
 
 // GET /api/routines
 routinesRouter.get("/", async (req, res, next) => {
@@ -16,18 +21,14 @@ routinesRouter.get("/", async (req, res, next) => {
     const allRoutines = await getAllPublicRoutines();
 
     res.send(allRoutines);
-  } catch (error) {
-    next(error);
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
 // POST /api/routines
 routinesRouter.post("/", requireUser, async (req, res, next) => {
   const { isPublic, name, goal } = req.body;
-  // const userId = req.user.id;
-  // console.log(`userId from /routines: ${userId}`)
-
-  // console.log(`creatorId: ${creatorId}, isPublic: ${isPublic}, name: ${name}, goal: ${goal}`)
 
   try {
     const newRoutine = await createRoutine({
@@ -55,7 +56,7 @@ routinesRouter.patch("/:routineId", requireUser, async (req, res, next) => {
       next(
         res.status(403).send({
           name: "unauthorizedUser",
-          message: `User ${user.username} is not allowed to update Every day`,
+          message: `User ${user.username} is not allowed to update ${routineToUpdate.name}`,
           error: "unauthorizedUser",
         })
       );
@@ -102,22 +103,23 @@ routinesRouter.delete("/:routineId", requireUser, async (req, res, next) => {
       const deletedRoutine = await destroyRoutine(routineId);
       res.send(deletedRoutine);
     }
-  } catch (error) {
-    next(error);
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
 // POST /api/routines/:routineId/activities
 routinesRouter.post("/:routineId/activities", async (req, res, next) => {
   const { routineId } = req.params;
-  // console.log(`routineId: ${routineId}`);
-  // console.log(`req.body.count: ${req.body.count}`);
   const { activityId, duration, count } = req.body;
 
-  try {
-    console.log(`routineId: ${routineId}, activityId: ${activityId}`);
+  const doesRoutineActivityAlreadyExist = await checkRoutineActivityExists(
+    routineId,
+    activityId
+  );
 
-    if (routineId === activityId) {
+  try {
+    if (doesRoutineActivityAlreadyExist) {
       next(
         res.status(403).send({
           name: "duplicateActivityError",
@@ -133,14 +135,10 @@ routinesRouter.post("/:routineId/activities", async (req, res, next) => {
         duration,
       });
 
-      console.log(
-        `updatedRoutine.routineId: ${routineId}, updatedRoutine.activityId: ${activityId}`
-      );
-
       res.send(updatedRoutine);
     }
-  } catch (error) {
-    next(error);
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 

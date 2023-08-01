@@ -3,23 +3,12 @@ const express = require("express");
 const usersRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
-const {
-  getUser,
-  getUserByUsername,
-  createUser,
-  getUserById,
-} = require("../db/users");
+const { getUser, getUserByUsername, createUser } = require("../db/users");
 const {
   getPublicRoutinesByUser,
   getAllRoutinesByUser,
 } = require("../db/routines");
 const { requireUser } = require("./utils");
-
-usersRouter.use((req, res, next) => {
-  console.log("A request is being made to /users");
-
-  next();
-});
 
 // POST /api/users/register
 usersRouter.post("/register", async (req, res, next) => {
@@ -59,8 +48,8 @@ usersRouter.post("/register", async (req, res, next) => {
       token,
       user,
     });
-  } catch (error) {
-    next(error);
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
@@ -90,9 +79,9 @@ usersRouter.post("/login", async (req, res, next) => {
         error: "Username or password is incorrect",
       });
     }
-  } catch (error) {
-    console.log(error);
-    next(error);
+  } catch ({ name, message }) {
+    
+    next({ name, message });
   }
 });
 
@@ -109,24 +98,19 @@ usersRouter.get("/me", requireUser, async (req, res, next) => {
 
   try {
     res.send(user);
-  } catch (error) {
-    next(error);
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
 // GET /api/users/:username/routines
 usersRouter.get("/:username/routines", async (req, res, next) => {
   const { username } = req.params;
-  // console.log("req.params from /:username/routines: ", req.params);
-  // console.log("username from /:username/routines: ", username);
 
   const user = req.user.username;
-  // console.log("user from /:username/routines: ", user);
 
   if (username === user) {
-    // console.log(`username: ${username} and user: ${user} is truthy`);
     try {
-      // console.log("req.params within try/catch block: ", req.params)
       const routines = await getAllRoutinesByUser(req.params);
 
       res.send(routines);
@@ -134,7 +118,6 @@ usersRouter.get("/:username/routines", async (req, res, next) => {
       next({ name, message });
     }
   } else {
-    // console.log(`username: ${username} and user: ${user} is falsy`);
     try {
       const routines = await getPublicRoutinesByUser(req.params);
       res.send(routines);

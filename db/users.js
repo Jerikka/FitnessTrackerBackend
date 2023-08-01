@@ -37,7 +37,7 @@ async function getUser({ username, password }) {
 
     if (isValid) {
       delete user.password;
-      
+
       return user;
     }
   } catch (error) {
@@ -46,7 +46,6 @@ async function getUser({ username, password }) {
 }
 
 async function getUserById(userId) {
-  
   try {
     const {
       rows: [user],
@@ -60,7 +59,7 @@ async function getUserById(userId) {
       [userId]
     );
     delete user.password;
-    
+
     return user;
   } catch (error) {
     throw error;

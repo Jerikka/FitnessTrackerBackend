@@ -21,7 +21,6 @@ async function addActivityToRoutine({
 
     return routine_activity;
   } catch (error) {
-    
     throw error;
   }
 }
@@ -46,6 +45,7 @@ async function getRoutineActivityById(id) {
 }
 
 async function getRoutineActivitiesByRoutine({ id }) {
+  console.log(`id from getRoutineActivitiesByRoutine function: ${id}`);
   try {
     const { rows: routineActivity } = await client.query(
       `
@@ -56,7 +56,7 @@ async function getRoutineActivitiesByRoutine({ id }) {
       `,
       [id]
     );
-
+    // console.log(`routineActivity from getRoutineActivitiesByRoutine: ${routineActivity}`)
     return routineActivity;
   } catch (error) {
     throw error;
@@ -91,8 +91,6 @@ async function updateRoutineActivity({ id, ...fields }) {
 }
 
 async function destroyRoutineActivity(id) {
-  console.log("id from destroyRoutineActivity: ", id);
-
   try {
     const {
       rows: [routineActivity],
@@ -136,6 +134,30 @@ async function canEditRoutineActivity(routineActivityId, userId) {
   }
 }
 
+async function checkRoutineActivityExists(routineId, activityId) {
+  try {
+    const {
+      rows: [routine],
+    } = await client.query(
+      `
+      SELECT *
+      FROM routine_activities
+      WHERE "routineId" = $1
+      
+      `,
+      [routineId]
+    );
+
+    if (routine && routine.activityId === activityId) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   getRoutineActivityById,
   addActivityToRoutine,
@@ -143,4 +165,5 @@ module.exports = {
   updateRoutineActivity,
   destroyRoutineActivity,
   canEditRoutineActivity,
+  checkRoutineActivityExists,
 };

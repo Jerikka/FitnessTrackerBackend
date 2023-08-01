@@ -5,7 +5,7 @@ const client = require("./client");
 async function createActivity({ name, description }) {
   // return the new activity
 
-  // console.log(`name: ${name}, description: ${description} from createActivity`)
+  
 
   try {
     const {
@@ -21,7 +21,7 @@ async function createActivity({ name, description }) {
 
     return activity;
   } catch (error) {
-    // console.log("error from createActivity: ", error);
+    
     throw error;
   }
 }
@@ -61,7 +61,7 @@ async function getActivityById(id) {
 }
 
 async function getActivityByName(name) {
-  // console.log(`name from getActivityByName: ${name}`)
+  
   try {
     const {
       rows: [activity],
@@ -94,12 +94,10 @@ async function attachActivitiesToRoutines(routines) {
         (routineActivities) => routineActivities.routineId === routine.id
       );
 
-      // console.log("routine: ", routine);
+     
     });
 
-    // console.log("routineActivities: ", routineActivities)
-
-    // console.log("routines from attachActivitiesToRoutines: ", routines)
+   
 
     return routines;
   } catch (error) {

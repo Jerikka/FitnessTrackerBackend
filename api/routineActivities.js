@@ -4,7 +4,9 @@ const {
   canEditRoutineActivity,
   updateRoutineActivity,
   destroyRoutineActivity,
+  getRoutineActivityById,
 } = require("../db/routine_activities");
+const { getRoutineById } = require("../db/routines");
 const { requireUser } = require("./utils");
 
 // PATCH /api/routine_activities/:routineActivityId
@@ -24,11 +26,15 @@ routineActivitiesRouter.patch(
         user.id
       );
 
+      const routineActivity = await getRoutineActivityById(routineActivityId);
+
+      const routine = await getRoutineById(routineActivity.routineId);
+
       if (!canUserEdit) {
         next(
           res.status(403).send({
             name: "unauthorizedUserError",
-            message: `User ${user.username} is not allowed to update In the evening`,
+            message: `User ${user.username} is not allowed to update ${routine.name}`,
             error: "unauthorizedUserError",
           })
         );
@@ -71,7 +77,6 @@ routineActivitiesRouter.delete(
         routineActivityId,
         user.id
       );
-      console.log(`canUserEdit: ${canUserEdit}`);
 
       if (!canUserEdit) {
         next(
@@ -87,8 +92,8 @@ routineActivitiesRouter.delete(
         );
         res.send(deletedRoutineActivity);
       }
-    } catch (error) {
-      next(error);
+    } catch ({ name, message }) {
+      next({ name, message });
     }
   }
 );
