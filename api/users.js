@@ -87,14 +87,9 @@ usersRouter.post("/login", async (req, res, next) => {
 
 // GET /api/users/me
 usersRouter.get("/me", requireUser, async (req, res, next) => {
-  // const id = req.user.id;
-  // const auth = req.header("Authorization");
+  
   const user = req.user;
-  // console.log("user from /me: ", user);
-  // console.log("id: ", id)
-  // console.log("req.headers: ", req.headers)
-  // console.log("user from /me: ", user)
-  // console.log("auth: ", auth)
+  
 
   try {
     res.send(user);

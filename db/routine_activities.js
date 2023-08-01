@@ -56,7 +56,7 @@ async function getRoutineActivitiesByRoutine({ id }) {
       `,
       [id]
     );
-    // console.log(`routineActivity from getRoutineActivitiesByRoutine: ${routineActivity}`)
+    
     return routineActivity;
   } catch (error) {
     throw error;

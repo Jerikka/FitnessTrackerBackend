@@ -9,11 +9,10 @@ const {
 } = require("../db/routines");
 const {
   addActivityToRoutine,
-  getRoutineActivitiesByRoutine,
   checkRoutineActivityExists,
 } = require("../db/routine_activities");
 const { requireUser } = require("./utils");
-const { getActivityById } = require("../db/activities");
+
 
 // GET /api/routines
 routinesRouter.get("/", async (req, res, next) => {

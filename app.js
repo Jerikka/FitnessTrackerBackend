@@ -5,15 +5,6 @@ const app = express();
 
 // Setup your Middleware and API Router here
 
-// const {
-//   USER: user,
-//   HOST: host,
-//   DATABASE: database,
-//   PASSWORD: password,
-//   PORT: port,
-//   SERVER_PORT,
-// } = process.env;
-
 const morgan = require("morgan");
 
 app.use(morgan("dev"));
@@ -25,7 +16,5 @@ app.use(express.json());
 
 const apiRouter = require("./api");
 app.use("/api", apiRouter);
-
-
 
 module.exports = app;

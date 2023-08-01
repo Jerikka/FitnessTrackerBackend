@@ -12,18 +12,16 @@ const { requireUser } = require("./utils");
 
 // GET /api/activities/:activityId/routines
 activitiesRouter.get("/:activityId/routines", async (req, res, next) => {
-  // console.log("req.params from /:activityId/routines: ", req.params)
+  
   const { activityId } = req.params;
-  // console.log("activityId from /:activityId/routines: ", activityId)
+  
 
   try {
     const routinesByActivity = await getPublicRoutinesByActivity({
       id: activityId,
     });
 
-    // console.log("routinesByActivity from /:activityId/routines: ", routinesByActivity)
-
-    // console.log("routinesByActivity.length: ", routinesByActivity.length);
+   
 
     if (routinesByActivity.length > 0) {
       res.send(routinesByActivity);
@@ -52,14 +50,12 @@ activitiesRouter.get("/", async (req, res, next) => {
 
 // POST /api/activities
 activitiesRouter.post("/", requireUser, async (req, res, next) => {
-  // const user = req.user.username
-  // console.log("user from /activities: ", user)
-  // console.log("req.body from /activities: ", req.body)
+ 
   const { name, description } = req.body;
 
   const existingActivity = await getActivityByName(name);
 
-  // console.log(`existingActivity: ${existingActivity}`)
+  
 
   if (!existingActivity) {
     try {
